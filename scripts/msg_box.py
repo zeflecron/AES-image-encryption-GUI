@@ -1,60 +1,61 @@
 import tkinter as tk
-from tkinter import messagebox
-import enc_functions
-
-# OPTIMIZE: remove the 4 None
-root = None
-key_gen_frame = None
-encryption_frame = None
-decryption_frame = None
+from tkinter import messagebox as mbox
+from enc_func import EncFunc
 
 
-# to show pop-ups when `generate_key` button is pressed
-def key_gen_msg_box(aes_name, iv_name):
-    ans = messagebox.askyesno('???', 'Are you sure you want '
-                                     'to generate new keys?\n'
-                                     '(Keys with same name '
-                                     'will be overwritten)')
+class MsgBox:
+    def __init__(self, root, key_gen_f, enc_f, dec_f):
+        self._root = root
+        self._key_gen_f = key_gen_f
+        self._enc_f = enc_f
+        self._dec_f = dec_f
+        self._enc_func_1 = EncFunc()
 
-    if aes_name == iv_name:
-        messagebox.showerror('ERROR', 'AES and iv filename cannot be the same')
+    # to show pop-ups when `generate_key` button is pressed
+    def key_gen_m_box(self, key_name, iv_name):
+        ans = mbox.askyesno(
+            '???',
+            'Are you sure you want to generate new keys?\n'
+            '(Keys with same name will be overwritten)')
 
-    elif ans == 1:
-        try:
-            enc_functions.generate_key(aes_name, iv_name)
-            label_gen = tk.Label(key_gen_frame,
-                                 text='Keys have been generated!')
-            label_gen.grid(row=3, column=0, columnspan=2, padx=10, pady=5)
-        except Exception as e:
-            messagebox.showerror('ERROR', e)
+        if key_name == iv_name:
+            mbox.showerror('ERROR', 'key and iv filename cannot be the same')
 
-
-# to show pop-ups when `encrypt` or `decrypt` button is pressed
-def enc_dec_msg_box(paths, option, aes_path, iv_path, func):
-    ans = messagebox.askyesno('Confirmation required',
-                              'Same file names will be overwritten, confirm?')
-
-    if ans == 0:
-        pass
-
-    elif aes_path is None or iv_path is None:
-        messagebox.showerror('ERROR', 'AES or iv file path not selected')
-
-    elif ans == 1:
-        if func == 'encrypt':
+        elif ans == 1:
             try:
-                enc_functions.encrypt(paths, option, aes_path, iv_path)
-                label_enc = tk.Label(encryption_frame,
-                                     text='Images encrypted!')
-                label_enc.grid(row=3, column=0, columnspan=3, padx=10, pady=5)
+                EncFunc.generate_key(key_name, iv_name)
+                l_gen = tk.Label(
+                    self._key_gen_f,
+                    text='Keys have been generated!')
+                l_gen.grid(row=3, column=0, columnspan=2, padx=10, pady=5)
             except Exception as e:
-                messagebox.showerror('ERROR', e)
+                mbox.showerror('ERROR', e)
 
-        elif func == 'decrypt':
-            try:
-                enc_functions.decrypt(paths, option, aes_path, iv_path)
-                label_dec = tk.Label(decryption_frame,
-                                     text='Data decrypted!')
-                label_dec.grid(row=3, column=0, columnspan=3, padx=10, pady=5)
-            except Exception as e:
-                messagebox.showerror('ERROR', e)
+    # to show pop-ups when `encrypt` or `decrypt` button is pressed
+    def enc_dec_m_box(self, paths, option, key_path, iv_path, func):
+        ans = mbox.askyesno(
+            'Confirmation required',
+            'Same file names will be overwritten, confirm?')
+
+        if ans == 0:
+            pass
+
+        elif key_path is None or iv_path is None:
+            mbox.showerror('ERROR', 'key or iv file path not selected')
+
+        elif ans == 1:
+            if func == 'encrypt':
+                try:
+                    self._enc_func_1.encrypt(paths, option, key_path, iv_path)
+                    l_enc = tk.Label(self._enc_f, text='Images encrypted!')
+                    l_enc.grid(row=3, column=0, columnspan=3, padx=10, pady=5)
+                except Exception as e:
+                    mbox.showerror('ERROR', e)
+
+            elif func == 'decrypt':
+                try:
+                    self._enc_func_1.decrypt(paths, option, key_path, iv_path)
+                    l_dec = tk.Label(self._dec_f, text='Data decrypted!')
+                    l_dec.grid(row=3, column=0, columnspan=3, padx=10, pady=5)
+                except Exception as e:
+                    mbox.showerror('ERROR', e)
