@@ -19,5 +19,6 @@ Purpose of this is to practice tkinter and file management
 
 # Extra notes
 test_image_2 in the dec_images cannot be opened because it was decrypted incorrectly (on purpose)
+everything was encrypted and decrypted using CTR mode (except test_image_2 using CFB)
 
 [Link for some of the test images](https://unsplash.com/@simonppt)
