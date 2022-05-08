@@ -4,12 +4,15 @@ from enc_func import EncFunc
 
 
 class MsgBox:
-    def __init__(self, root, key_gen_f, enc_f, dec_f):
+    def __init__(self, root, t_gen_comp, t_key_path,
+                 t_iv_path, t_enc_comp, t_dec_comp):
         self._root = root
-        self._key_gen_f = key_gen_f
-        self._enc_f = enc_f
-        self._dec_f = dec_f
-        self._enc_func_1 = EncFunc()
+        self._t_gen_comp = t_gen_comp
+        self._t_key_path = t_key_path
+        self._t_iv_path = t_iv_path
+        self._t_enc_comp = t_enc_comp
+        self._t_dec_comp = t_dec_comp
+        self._enc_func = EncFunc()
 
     # to show pop-ups when `generate_key` button is pressed
     def key_gen_m_box(self, key_name, iv_name):
@@ -24,12 +27,9 @@ class MsgBox:
         elif ans == 1:
             try:
                 EncFunc.generate_key(key_name, iv_name)
-                l_gen = tk.Label(
-                    self._key_gen_f,
-                    text='Keys have been generated!')
-                l_gen.grid(row=3, column=0, columnspan=2, padx=10, pady=5)
+                self._t_gen_comp.set('Keys have been generated!')
             except Exception as e:
-                mbox.showerror('ERROR', e)
+                mbox.showerror('ERROR', str(e))
 
     # to show pop-ups when `encrypt` or `decrypt` button is pressed
     def enc_dec_m_box(self, paths, option, key_path, iv_path, func):
@@ -46,16 +46,14 @@ class MsgBox:
         elif ans == 1:
             if func == 'encrypt':
                 try:
-                    self._enc_func_1.encrypt(paths, option, key_path, iv_path)
-                    l_enc = tk.Label(self._enc_f, text='Images encrypted!')
-                    l_enc.grid(row=3, column=0, columnspan=3, padx=10, pady=5)
+                    self._enc_func.encrypt(paths, option, key_path, iv_path)
+                    self._t_dec_comp.set('Images encrypted!')
                 except Exception as e:
-                    mbox.showerror('ERROR', e)
+                    mbox.showerror('ERROR', str(e))
 
             elif func == 'decrypt':
                 try:
-                    self._enc_func_1.decrypt(paths, option, key_path, iv_path)
-                    l_dec = tk.Label(self._dec_f, text='Data decrypted!')
-                    l_dec.grid(row=3, column=0, columnspan=3, padx=10, pady=5)
+                    self._enc_func.decrypt(paths, option, key_path, iv_path)
+                    self._t_dec_comp.set('Data decrypted!')
                 except Exception as e:
-                    mbox.showerror('ERROR', e)
+                    mbox.showerror('ERROR', str(e))
