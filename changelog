@@ -1,10 +1,12 @@
-V 1.0.0
+Note: images, screenshots, gifs, and videos will only be updated if it has relevant changes the can be seen directly
+
+V 1.0.0 (02-01-2022)
 - Initial upload
 
-V 1.1.0
+V 1.1.0 (12-01-2022)
 - Implemented OOP concept
 - Changed variable naming
 
-V 1.1.1
+V 1.1.1 (08-05-2022)
 - Changed more variable names
 - Fixed overlapping label on whitespace (now removed and uses `StringVar()` instead)
