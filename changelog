@@ -1,0 +1,10 @@
+V 1.0.0
+- Initial upload
+
+V 1.1.0
+- Implemented OOP concept
+- Changed variable naming
+
+V 1.1.1
+- Changed more variable names
+- Fixed overlapping label on whitespace (now removed and uses `StringVar()` instead)
