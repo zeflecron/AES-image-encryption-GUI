@@ -1,5 +1,6 @@
 import os
 import tkinter as tk
+import glob
 from tkinter import filedialog
 from msg_box import MsgBox
 
@@ -24,7 +25,7 @@ class MainApplication(tk.Frame):
         
         # SECTION: KEY GENERATION
         f_key_gen = tk.LabelFrame(root, text='Key generation')
-        f_key_gen.grid(row=0, column=0, columnspan=2, padx=5, pady=5)
+        f_key_gen.grid(row=0, column=0, padx=5, pady=5)
 
         l_key_name = tk.Label(f_key_gen, text='key name:')
         l_key_name.grid(row=0, column=0, padx=10, pady=5)
@@ -49,7 +50,7 @@ class MainApplication(tk.Frame):
 
         # SECTION: SELECTION
         f_selection = tk.LabelFrame(root, text='Select keys and mode')
-        f_selection.grid(row=1, column=0, columnspan=2, padx=5, pady=5)
+        f_selection.grid(row=1, column=0, padx=5, pady=5)
 
         l_key_file = tk.Label(f_selection, text='key file:')
         l_key_file.grid(row=0, column=0, padx=10, pady=5)
@@ -94,9 +95,9 @@ class MainApplication(tk.Frame):
 
         # SECTION: ENCRYPTION
         f_enc = tk.LabelFrame(root, text='Encrypt files')
-        f_enc.grid(row=2, column=0, padx=5, pady=5)
+        f_enc.grid(row=0, rowspan=2, column=1, padx=5, pady=5)
 
-        b_add_image = tk.Button(f_enc, text='Add',
+        b_add_image = tk.Button(f_enc, text='Add image',
                                 command=lambda:
                                 self.add_item(
                                     'image', images_listbox, data_listbox))
@@ -108,10 +109,22 @@ class MainApplication(tk.Frame):
                                     'image', images_listbox, data_listbox))
         b_del_image.grid(row=0, column=2, padx=10, pady=5)
 
+        b_add_img_dir = tk.Button(f_enc, text='Add directory',
+                                  command=lambda:
+                                  self.add_dir(
+                                      'image', images_listbox, data_listbox))
+        b_add_img_dir.grid(row=1, column=0, padx=10, pady=5)
+
+        b_del_img_all = tk.Button(f_enc, text='Delete all',
+                                  command=lambda:
+                                  self.del_all(
+                                      'image', images_listbox, data_listbox))
+        b_del_img_all.grid(row=1, column=2, padx=10, pady=5)
+
         images_listbox = tk.Listbox(f_enc)
-        images_listbox.grid(row=1, column=0)
+        images_listbox.grid(row=2, column=0)
         scrollbar_image = tk.Scrollbar(f_enc)
-        scrollbar_image.grid(row=1, column=1)
+        scrollbar_image.grid(row=2, column=1)
         images_listbox.config(yscrollcommand=scrollbar_image.set)
         scrollbar_image.config(command=images_listbox.yview)
 
@@ -120,15 +133,15 @@ class MainApplication(tk.Frame):
                                 m_box.enc_dec_m_box(
                                     self._images, c.get(), self._key_path,
                                     self._iv_path, 'encrypt'))
-        b_enc_image.grid(row=2, column=0, columnspan=3, padx=10, pady=5)
+        b_enc_image.grid(row=3, column=0, columnspan=3, padx=10, pady=5)
 
         t_enc_comp = tk.StringVar()
         l_enc_comp = tk.Label(f_enc, textvariable=t_enc_comp)
-        l_enc_comp.grid(row=3, column=0, columnspan=3, padx=10, pady=5)
+        l_enc_comp.grid(row=4, column=0, columnspan=3, padx=10, pady=5)
 
         # SECTION: DECRYPTION
         f_dec = tk.LabelFrame(root, text='Decrypt files')
-        f_dec.grid(row=2, column=1, padx=5, pady=5)
+        f_dec.grid(row=0, rowspan=2, column=2, padx=5, pady=5)
 
         b_add_data = tk.Button(f_dec, text='Add',
                                command=lambda: self.add_item(
@@ -140,10 +153,22 @@ class MainApplication(tk.Frame):
                                    'data', images_listbox, data_listbox))
         b_del_data.grid(row=0, column=2, padx=10, pady=5)
 
+        b_add_data_dir = tk.Button(f_dec, text='Add directory',
+                                   command=lambda:
+                                   self.add_dir(
+                                       'data', images_listbox, data_listbox))
+        b_add_data_dir.grid(row=1, column=0, padx=10, pady=5)
+
+        b_del_data_all = tk.Button(f_dec, text='Delete all',
+                                   command=lambda:
+                                   self.del_all(
+                                       'data', images_listbox, data_listbox))
+        b_del_data_all.grid(row=1, column=2, padx=10, pady=5)
+
         data_listbox = tk.Listbox(f_dec)
-        data_listbox.grid(row=1, column=0)
+        data_listbox.grid(row=2, column=0)
         scrollbar_data = tk.Scrollbar(f_dec)
-        scrollbar_data.grid(row=1, column=1)
+        scrollbar_data.grid(row=2, column=1)
         data_listbox.config(yscrollcommand=scrollbar_data.set)
         scrollbar_data.config(command=data_listbox.yview)
 
@@ -152,11 +177,11 @@ class MainApplication(tk.Frame):
                                 m_box.enc_dec_m_box(
                                     self._data, c.get(), self._key_path,
                                     self._iv_path, 'decrypt'))
-        b_dec_image.grid(row=2, column=0, columnspan=3, padx=10, pady=5)
+        b_dec_image.grid(row=3, column=0, columnspan=3, padx=10, pady=5)
 
         t_dec_comp = tk.StringVar()
         l_dec_comp = tk.Label(f_dec, textvariable=t_dec_comp)
-        l_dec_comp.grid(row=3, column=0, columnspan=3, padx=10, pady=5)
+        l_dec_comp.grid(row=4, column=0, columnspan=3, padx=10, pady=5)
 
         # SECTION: MSG_BOX CONNECTION
         m_box = MsgBox(root, t_gen_comp, t_key_path,
@@ -193,6 +218,25 @@ class MainApplication(tk.Frame):
                 data_listbox.insert(tk.END, os.path.basename(filename))
                 self._data.append(filename)
 
+    def add_dir(self, add_type, images_listbox, data_listbox):
+        if add_type == 'image':
+            dir_name = filedialog.askdirectory(
+                initialdir='../images',
+                title='select a directory')
+            for filename in glob.iglob(dir_name + '**/*.jpg', recursive=True):
+                images_listbox.insert(tk.END, os.path.basename(filename))
+                self._images.append(filename)
+            for filename in glob.iglob(dir_name + '**/*.png', recursive=True):
+                images_listbox.insert(tk.END, os.path.basename(filename))
+                self._images.append(filename)
+        elif add_type == 'data':
+            dir_name = filedialog.askdirectory(
+                initialdir='../enc_images',
+                title='select a directory')
+            for filename in glob.iglob(dir_name + '**/*.bin', recursive=True):
+                data_listbox.insert(tk.END, os.path.basename(filename))
+                self._data.append(filename)
+
     def del_item(self, del_type, images_listbox, data_listbox):
         try:
             if del_type == 'image':
@@ -203,6 +247,17 @@ class MainApplication(tk.Frame):
                 selected = data_listbox.curselection()
                 data_listbox.delete(selected[0])
                 self._data.pop(selected[0])
+        except Exception as e:
+            print(str(e))
+
+    def del_all(self, del_type, images_listbox, data_listbox):
+        try:
+            if del_type == 'image':
+                images_listbox.delete(0, tk.END)
+                self._images = []
+            elif del_type == 'data':
+                data_listbox.delete(0, tk.END)
+                self._data = []
         except Exception as e:
             print(str(e))
 

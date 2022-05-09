@@ -20,9 +20,12 @@ class MsgBox:
             '???',
             'Are you sure you want to generate new keys?\n'
             '(Keys with same name will be overwritten)')
+        if ans == 0:
+            pass
 
-        if key_name == iv_name:
-            mbox.showerror('ERROR', 'key and iv filename cannot be the same')
+        elif key_name == iv_name:
+            mbox.showerror('ERROR',
+                           'key and iv filename cannot be the same')
 
         elif ans == 1:
             try:
@@ -47,7 +50,7 @@ class MsgBox:
             if func == 'encrypt':
                 try:
                     self._enc_func.encrypt(paths, option, key_path, iv_path)
-                    self._t_dec_comp.set('Images encrypted!')
+                    self._t_enc_comp.set('Images encrypted!')
                 except Exception as e:
                     mbox.showerror('ERROR', str(e))
 
