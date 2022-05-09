@@ -21,6 +21,6 @@ Purpose of this is to practice tkinter and file management
 test_image_2 in the dec_images cannot be opened because it was decrypted incorrectly (on purpose)
 everything was encrypted and decrypted using CTR mode (except test_image_2 using CFB)
 
-NOT MY IMAGES:
-[Link for test image 1-3](https://unsplash.com/@simonppt)
+NOT MY IMAGES:<br/>
+[Link for test image 1-3](https://unsplash.com/@simonppt)<br/>
 [Link for test image 6-8](https://unsplash.com/@niomilano)
